@@ -1,80 +1,54 @@
 package com.javatechie.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import java.sql.Timestamp;
 
 @Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfo extends BaseEntity {
+@SuperBuilder
+@Table(name = "user_info")
+public class UserInfo{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
     private String email;
-    private String password_hash;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "role")
     private String role;
+
+    @Column(name = "last_name")
     private String last_name;
+
+    @Column(name = "first_name")
     private String first_name;
 
-    public int getId() {
-        return id;
-    }
+    @Column(name = "created_date")
+    private Timestamp created_date;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Column(name = "created_by")
+    private String created_by;
 
-    public String getLogin() {
-        return name;
-    }
+    @Column(name = "updated_date")
+    private Timestamp updated_date;
 
-    public void setLogin(String login) {
-        this.name = login;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword_hash() {
-        return password_hash;
-    }
-
-    public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
+    @Column(name = "updated_by")
+    private String updated_by;
 }
