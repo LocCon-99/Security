@@ -1,22 +1,17 @@
 package com.javatechie.service;
 
-import com.javatechie.dto.Product;
+import com.javatechie.dto.UserDto;
 import com.javatechie.entity.UserInfo;
 import com.javatechie.repository.UserInfoRepository;
-import jakarta.annotation.PostConstruct;
+import com.javatechie.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class ProductService {
-
-    List<Product> productList = null;
 
     @Autowired
     private UserInfoRepository repository;
@@ -24,33 +19,20 @@ public class ProductService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostConstruct
-    public void loadProductsFromDB() {
-        productList = IntStream.rangeClosed(1, 100)
-                .mapToObj(i -> Product.builder()
-                        .productId(i)
-                        .name("product " + i)
-                        .qty(new Random().nextInt(10))
-                        .price(new Random().nextInt(5000)).build()
-                ).collect(Collectors.toList());
+    public List<UserInfo> listUser(){
+        return repository.findAll();
     }
 
-
-    public List<Product> getProducts() {
-        return productList;
-    }
-
-    public Product getProduct(int id) {
-        return productList.stream()
-                .filter(product -> product.getProductId() == id)
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("product " + id + " not found"));
-    }
-
-
-    public String addUser(UserInfo userInfo) {
-        userInfo.setPassword_hash(passwordEncoder.encode(userInfo.getPassword_hash()));
-        repository.save(userInfo);
-        return "user added to system ";
+    public UserInfo addUser( UserDto userDto) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setPassword(passwordEncoder.encode(userDto.getPassWord()));
+        userInfo.setName(userDto.getName());
+        userInfo.setRole(userDto.getRole());
+        userInfo.setEmail(userDto.getEmail());
+        userInfo.setLast_name(userDto.getLastName());
+        userInfo.setFirst_name(userDto.getFirstName());
+        userInfo.setCreated_date(DataUtils.buildBaseEntity().getCreated_date());
+        userInfo.setCreated_by(DataUtils.buildBaseEntity().getCreated_by());
+        return repository.save(userInfo);
     }
 }

@@ -2,6 +2,7 @@ package com.javatechie.controller;
 
 import com.javatechie.dto.AuthRequest;
 import com.javatechie.dto.Product;
+import com.javatechie.dto.UserDto;
 import com.javatechie.entity.UserInfo;
 import com.javatechie.service.JwtService;
 import com.javatechie.service.ProductService;
@@ -27,26 +28,16 @@ public class ProductController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
-
-    @PostMapping("/new")
-    public String addNewUser(@RequestBody UserInfo userInfo) {
-        return service.addUser(userInfo);
+    @PostMapping("/add-user")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public UserInfo addNewUser(@RequestBody UserDto userDto) {
+        return service.addUser(userDto);
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public List<Product> getAllTheProducts() {
-        return service.getProducts();
-    }
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public Product getProductById(@PathVariable int id) {
-        return service.getProduct(id);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<UserInfo> getAllUser() {
+        return service.listUser();
     }
 
 
